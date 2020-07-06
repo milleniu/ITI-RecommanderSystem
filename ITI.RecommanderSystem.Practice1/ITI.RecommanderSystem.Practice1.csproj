@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITI.RecommanderSystem.Core\ITI.RecommanderSystem.Core.csproj" />
+    <ProjectReference Include="..\ITI.RecommanderSystem.CSV\ITI.RecommanderSystem.CSV.csproj" />
+  </ItemGroup>
+
+</Project>
