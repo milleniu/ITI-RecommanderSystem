@@ -1,8 +1,8 @@
 ﻿using ITI.RecommanderSystem.Core;
-using ITI.RecommanderSystem.MarkovChains;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
+using ITI.RecommanderSystem.MarkovChains;
 
 namespace ITI.RecommanderSystem.Syllabus
 {
@@ -136,7 +136,8 @@ namespace ITI.RecommanderSystem.Syllabus
                 return pathCost + wayBackEdgeCost;
             }
 
-            var (cost, result) = TravelingSalesmanProblem.Resolve( graph, CostFunction );
+            var result = SimulatedAnnealing.ResolveGraph( graph, CostFunction );
+            var cost = CostFunction( result );
             Console.WriteLine( $"Cost: {cost,5} Path: {string.Join( "->", result )}->{result[ 0 ]}" );
         }
     }
