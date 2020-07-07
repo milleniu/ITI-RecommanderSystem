@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using QuickGraph;
 
@@ -7,10 +6,10 @@ namespace ITI.RecommanderSystem.MarkovChains
 {
     public static class TravelingSalesmanProblem
     {
-        public static (int Cost, TVertex[] Path) Resolve<TVertex, TEdge>
+        public static (float Cost, TVertex[] Path) Resolve<TVertex, TEdge>
         (
             BidirectionalGraph<TVertex, TEdge> graph,
-            IDictionary<TEdge, int> costs
+            Func<TVertex[], float> costFunction
         )
             where TEdge : IEdge<TVertex>
         {
@@ -20,34 +19,8 @@ namespace ITI.RecommanderSystem.MarkovChains
 
             var random = new Random();
 
-            int CostFunction( IReadOnlyList<TVertex> path )
-            {
-                var pathCost = 0;
-
-                for( var i = 1; i < path.Count; ++i )
-                {
-                    if( !graph.TryGetEdge( path[ i - 1 ], path[ i ], out var edge )
-                     && !graph.TryGetEdge( path[ i ], path[ i - 1 ], out edge ) )
-                        throw new InvalidOperationException( "graph is not complete" );
-
-                    if( !costs.TryGetValue( edge, out var edgeCost ) )
-                        throw new InvalidOperationException( "edge cost is unknown" );
-
-                    pathCost += edgeCost;
-                }
-
-                if (!graph.TryGetEdge(path[0], path[^1], out var wayBackEdge)
-                 && !graph.TryGetEdge(path[^1], path[0], out wayBackEdge))
-                    throw new InvalidOperationException("graph is not complete");
-
-                if (!costs.TryGetValue(wayBackEdge, out var wayBackEdgeCost))
-                    throw new InvalidOperationException("edge cost is unknown");
-
-                return pathCost + wayBackEdgeCost;
-            }
-
             var path = graph.Vertices.ToArray();
-            var EC = CostFunction( path );
+            var EC = costFunction( path );
 
             var t = 0;
             var T = T0;
@@ -57,9 +30,9 @@ namespace ITI.RecommanderSystem.MarkovChains
                 var j = random.Next( 0, graph.VertexCount );
 
                 ( path[ i ], path[ j ] ) = ( path[ j ], path[ i ] );
-                var EF = CostFunction( path );
+                var EF = costFunction( path );
 
-                int Metropolis( int E1, int E2 )
+                float Metropolis( float E1, float E2 )
                 {
                     if( E1 <= E2 )
                     {

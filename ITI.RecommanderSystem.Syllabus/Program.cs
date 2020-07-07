@@ -110,8 +110,34 @@ namespace ITI.RecommanderSystem.Syllabus
                 [ edge45 ] = 2
             };
 
-            var (cost, path) = TravelingSalesmanProblem.Resolve( graph, costs );
-            Console.WriteLine( $"Cost: {cost,5} Path: {string.Join( "->", path )}->{path[ 0 ]}" );
+            float CostFunction(IReadOnlyList<string> path)
+            {
+                var pathCost = 0;
+
+                for (var i = 1; i < path.Count; ++i)
+                {
+                    if (!graph.TryGetEdge(path[i - 1], path[i], out var edge)
+                     && !graph.TryGetEdge(path[i], path[i - 1], out edge))
+                        throw new InvalidOperationException("graph is not complete");
+
+                    if (!costs.TryGetValue(edge, out var edgeCost))
+                        throw new InvalidOperationException("edge cost is unknown");
+
+                    pathCost += edgeCost;
+                }
+
+                if (!graph.TryGetEdge(path[0], path[^1], out var wayBackEdge)
+                 && !graph.TryGetEdge(path[^1], path[0], out wayBackEdge))
+                    throw new InvalidOperationException("graph is not complete");
+
+                if (!costs.TryGetValue(wayBackEdge, out var wayBackEdgeCost))
+                    throw new InvalidOperationException("edge cost is unknown");
+
+                return pathCost + wayBackEdgeCost;
+            }
+
+            var (cost, result) = TravelingSalesmanProblem.Resolve( graph, CostFunction );
+            Console.WriteLine( $"Cost: {cost,5} Path: {string.Join( "->", result )}->{result[ 0 ]}" );
         }
     }
 }
