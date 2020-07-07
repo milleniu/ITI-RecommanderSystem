@@ -21,6 +21,9 @@ namespace ITI.RecommanderSystem.Syllabus
             var usersSimilarities = ActorSimilarities.ComputeActorsSimilarities(ratings);
             var similarUsers = ActorSimilarities.GetSimilarActors(userId, usersSimilarities, 2);
             var recommendations = ActorSimilarities.GetActorBasedRecommendations(userId, ratings, similarUsers, 3);
+
+            foreach (var (id, score) in recommendations)
+                Console.WriteLine($"{id}: {score}");
         }
     }
 }

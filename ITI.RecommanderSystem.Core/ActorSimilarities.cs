@@ -5,28 +5,31 @@ namespace ITI.RecommanderSystem.Core
 {
     public static class ActorSimilarities
     {
-        public static float[,] ComputeActorsSimilarities
+        private static readonly WeightedResult.WeightedResultComparer ResultComparer =
+            new WeightedResult.WeightedResultComparer();
+
+        public static float[ , ] ComputeActorsSimilarities
         (
-            int[,] data
+            int[ , ] data
         )
         {
-            var count = data.GetLength(0);
-            var matrix = new float[count, count];
+            var count = data.GetLength( 0 );
+            var matrix = new float[ count, count ];
 
             var lowerBounds = 0;
-            for (var i = 0; i < count; ++i)
+            for( var i = 0; i < count; ++i )
             {
-                for (var j = lowerBounds; j < count; ++j)
+                for( var j = lowerBounds; j < count; ++j )
                 {
-                    if (i == j)
+                    if( i == j )
                     {
-                        matrix[i, j] = 1;
+                        matrix[ i, j ] = 1;
                     }
                     else
                     {
-                        var pearsonScore = SimilarityComputer.Pearson(data, i, j);
-                        matrix[i, j] = pearsonScore;
-                        matrix[j, i] = pearsonScore;
+                        var pearsonScore = SimilarityComputer.Pearson( data, i, j );
+                        matrix[ i, j ] = pearsonScore;
+                        matrix[ j, i ] = pearsonScore;
                     }
                 }
 
@@ -36,70 +39,65 @@ namespace ITI.RecommanderSystem.Core
             return matrix;
         }
 
-        public static IReadOnlyCollection<(int userId, float similarity)> GetSimilarActors
+        public static IReadOnlyCollection<WeightedResult> GetSimilarActors
         (
             int actorId,
-            float[,] actorSimilarities,
+            float[ , ] actorSimilarities,
             int count
         )
         {
-            var n = actorSimilarities.GetLength(0);
+            var n = actorSimilarities.GetLength( 0 );
             var actorIdx = actorId - 1;
 
-            var bestKeeper = new BestKeeper<(int userId, float similarity)>
-            (
-                count,
-                (a, b) => a.similarity > b.similarity ? 1 : -1
-            );
+            var bestKeeper = new BestKeeper<WeightedResult>( count, ResultComparer );
 
-            for (var i = 0; i < n; ++i)
+            for( var i = 0; i < n; ++i )
             {
-                if (i == actorIdx) continue;
-                bestKeeper.Add((i + 1, actorSimilarities[actorIdx, i]));
+                if( i == actorIdx ) continue;
+
+                var actorSimilarity = new WeightedResult( i + 1, actorSimilarities[ actorIdx, i ] );
+                bestKeeper.Add( actorSimilarity );
             }
 
             return bestKeeper;
         }
 
-        public static IReadOnlyCollection<(int elementId, float score)> GetActorBasedRecommendations
+        public static IReadOnlyCollection<WeightedResult> GetActorBasedRecommendations
         (
             int actorId,
-            int[,] ratings,
-            IReadOnlyCollection<(int userId, float similarity)> similarActors,
+            int[ , ] ratings,
+            IReadOnlyCollection<WeightedResult> similarActors,
             int count
         )
         {
-            var elementCount = ratings.GetLength(1);
+            var elementCount = ratings.GetLength( 1 );
             var actorIdx = actorId - 1;
 
-            var bestKeeper = new BestKeeper<(int elementId, float score)>
-            (
-                count,
-                (a, b) => a.score > b.score ? 1 : -1
-            );
+            var bestKeeper = new BestKeeper<WeightedResult>( count, ResultComparer );
 
-            for (var elementIdx = 0; elementIdx < elementCount; ++elementIdx)
+            for( var elementIdx = 0; elementIdx < elementCount; ++elementIdx )
             {
-                if (ratings[actorIdx, elementIdx] > 0) continue;
+                if( ratings[ actorIdx, elementIdx ] > 0 ) continue;
 
                 var hasSimilarRate = false;
 
                 float weightedSum = 0, similaritySum = 0;
-                foreach (var (id, similarity) in similarActors)
+                foreach( var (id, similarity) in similarActors )
                 {
                     var otherActorIdx = id - 1;
-                    var rate = ratings[otherActorIdx, elementIdx];
-                    if (rate == 0) continue;
+                    var rate = ratings[ otherActorIdx, elementIdx ];
+                    if( rate == 0 ) continue;
 
                     hasSimilarRate = true;
                     weightedSum += rate * similarity;
                     similaritySum += similarity;
                 }
 
-                if (!hasSimilarRate) continue;
+                if( !hasSimilarRate ) continue;
 
                 var score = similaritySum == 0 ? 0F : weightedSum / similaritySum;
-                bestKeeper.Add((elementIdx + 1, score));
+                var result = new WeightedResult( elementIdx + 1, score );
+                bestKeeper.Add( result );
             }
 
             return bestKeeper;
