@@ -12,6 +12,9 @@ namespace ITI.RecommanderSystem.Practice1
         private static void Main( string[] args )
         {
             var dataFolder = args[ 0 ];
+            var userId = short.Parse( args[ 1 ] );
+            var recommendationsCount = short.Parse( args[ 2 ] );
+            var similarUsersCount = short.Parse( args[ 3 ] );
 
             var csvConfiguration = CSVLoader.InitializeConfiguration
             (
@@ -29,8 +32,8 @@ namespace ITI.RecommanderSystem.Practice1
 
             var usersRatings = GenerateRatingsMatrix( users, movies, ratings );
             var usersSimilarities = ActorSimilarities.ComputeActorsSimilarities( usersRatings );
-            var similarUsers = ActorSimilarities.GetSimilarActors( 1, usersSimilarities, 5 );
-            var recommendations = ActorSimilarities.GetActorBasedRecommendations( 1, usersRatings, similarUsers, 10 );
+            var similarUsers = ActorSimilarities.GetSimilarActors( userId, usersSimilarities, similarUsersCount );
+            var recommendations = ActorSimilarities.GetActorBasedRecommendations( userId, usersRatings, similarUsers, recommendationsCount );
 
             foreach( var (movieId, score) in recommendations )
                 Console.WriteLine( $"{movies[ movieId - 1 ].Title}: {score}" );
