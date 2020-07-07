@@ -7,7 +7,7 @@ namespace ITI.RecommanderSystem.MarkovChains
 {
     public static class TravelingSalesmanProblem
     {
-        public static IReadOnlyCollection<TVertex> Resolve<TVertex, TEdge>
+        public static (int Cost, TVertex[] Path) Resolve<TVertex, TEdge>
         (
             BidirectionalGraph<TVertex, TEdge> graph,
             IDictionary<TEdge, int> costs
@@ -22,7 +22,7 @@ namespace ITI.RecommanderSystem.MarkovChains
 
             int CostFunction( IReadOnlyList<TVertex> path )
             {
-                var cost = 0;
+                var pathCost = 0;
 
                 for( var i = 1; i < path.Count; ++i )
                 {
@@ -33,10 +33,17 @@ namespace ITI.RecommanderSystem.MarkovChains
                     if( !costs.TryGetValue( edge, out var edgeCost ) )
                         throw new InvalidOperationException( "edge cost is unknown" );
 
-                    cost += edgeCost;
+                    pathCost += edgeCost;
                 }
 
-                return cost;
+                if (!graph.TryGetEdge(path[0], path[^1], out var wayBackEdge)
+                 && !graph.TryGetEdge(path[^1], path[0], out wayBackEdge))
+                    throw new InvalidOperationException("graph is not complete");
+
+                if (!costs.TryGetValue(wayBackEdge, out var wayBackEdgeCost))
+                    throw new InvalidOperationException("edge cost is unknown");
+
+                return pathCost + wayBackEdgeCost;
             }
 
             var path = graph.Vertices.ToArray();
@@ -82,7 +89,7 @@ namespace ITI.RecommanderSystem.MarkovChains
                 T = T0 * MathF.Exp( -t / tau );
             }
 
-            return path;
+            return (Cost: EC, Path: path);
         }
     }
 }

@@ -110,9 +110,8 @@ namespace ITI.RecommanderSystem.Syllabus
                 [ edge45 ] = 2
             };
 
-            var result = TravelingSalesmanProblem.Resolve( graph, costs );
-
-            Console.WriteLine( $"Path: {string.Join( "->", result )}" );
+            var (cost, path) = TravelingSalesmanProblem.Resolve( graph, costs );
+            Console.WriteLine( $"Cost: {cost,5} Path: {string.Join( "->", path )}->{path[ 0 ]}" );
         }
     }
 }
