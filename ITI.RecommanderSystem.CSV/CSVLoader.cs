@@ -10,11 +10,11 @@ namespace ITI.RecommanderSystem.CSV
 {
     public static class CSVLoader
     {
-        public static CsvConfiguration InitializeConfiguration( Action<CsvConfiguration> configuration )
+        public static CsvConfiguration InitializeConfiguration( string delimiter, Action<CsvConfiguration> configuration )
         {
             var csvConfiguration = new CsvConfiguration( CultureInfo.InvariantCulture )
             {
-                Delimiter = "::",
+                Delimiter = delimiter,
                 TrimOptions = TrimOptions.Trim,
                 HasHeaderRecord = false
             };

@@ -18,6 +18,7 @@ namespace ITI.RecommanderSystem.Practice1
 
             var csvConfiguration = CSVLoader.InitializeConfiguration
             (
+                "::",
                 configuration =>
                 {
                     configuration.RegisterClassMap<Movie.MovieMap>();
