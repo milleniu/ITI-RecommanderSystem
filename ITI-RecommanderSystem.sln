@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITI.RecommanderSystem.Pract
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Practices", "Practices", "{76EEC509-E7B5-4691-BFEA-2B16FCAC6AE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITI.RecommanderSystem.Practice3", "ITI.RecommanderSystem.Practice3\ITI.RecommanderSystem.Practice3.csproj", "{66BB03E1-EA90-4B92-BEE4-86499FF11D71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{57B4AD56-78F6-432E-8298-DB5F1760A0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57B4AD56-78F6-432E-8298-DB5F1760A0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57B4AD56-78F6-432E-8298-DB5F1760A0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66BB03E1-EA90-4B92-BEE4-86499FF11D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66BB03E1-EA90-4B92-BEE4-86499FF11D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66BB03E1-EA90-4B92-BEE4-86499FF11D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66BB03E1-EA90-4B92-BEE4-86499FF11D71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{7E580F12-24BE-403E-804B-613F3E751023} = {E23007DF-55AC-4D24-AA58-916D830D264F}
 		{8ECB73F3-7A78-4BBF-AFBC-CD2F23F2D477} = {E23007DF-55AC-4D24-AA58-916D830D264F}
 		{57B4AD56-78F6-432E-8298-DB5F1760A0BE} = {76EEC509-E7B5-4691-BFEA-2B16FCAC6AE6}
+		{66BB03E1-EA90-4B92-BEE4-86499FF11D71} = {76EEC509-E7B5-4691-BFEA-2B16FCAC6AE6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C6D71C7A-420A-4AA6-8EC3-D09DF3C6FA7F}

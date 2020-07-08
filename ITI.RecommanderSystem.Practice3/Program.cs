@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ITI.RecommanderSystem.CSV;
-using System.Linq;
 using ITI.RecommanderSystem.Practice2.DataModels;
 using ITI.RecommanderSystem.Practice2.Model;
 
-namespace ITI.RecommanderSystem.Practice2
+namespace ITI.RecommanderSystem.Practice3
 {
     public static class Program
     {
@@ -28,10 +24,11 @@ namespace ITI.RecommanderSystem.Practice2
             };
 
             const string destination = "LGA";
+            const int iterations = 100;
 
             var groupTravel = new GroupTravel( people, airportsByCode, flights, destination );
-            var (result, cost, iterations) = SimulatedAnnealingGroupTravelComputer.Compute( groupTravel );
-            
+            var ( result, cost ) = GeneticGroupTravelComputer.Compute( groupTravel, iterations: iterations );
+
             Console.WriteLine($"{cost} (iterations: {iterations})");
             groupTravel.PrintSchedule(result);
         }

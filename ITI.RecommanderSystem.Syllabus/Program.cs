@@ -186,17 +186,17 @@ namespace ITI.RecommanderSystem.Syllabus
             while( true )
             {
                 const int bestKeptCount = 10;
-                const int worseKeptCount = 4;
-                const int kept = bestKeptCount + worseKeptCount;
+                const int worstKeptCount = 4;
+                const int kept = bestKeptCount + worstKeptCount;
 
                 var bestKeeper = new BestKeeper<WeightedResult<int[]>>( bestKeptCount, resultDescending );
-                var worseKeeper = new BestKeeper<WeightedResult<int[]>>( worseKeptCount, resultAscending );
+                var worstKeeper = new BestKeeper<WeightedResult<int[]>>( worstKeptCount, resultAscending );
                 foreach( var candidate in population )
                 {
                     var cost = CostFunction( candidate );
                     var weightedCandidate = new WeightedResult<int[]>( candidate, cost );
                     bestKeeper.Add( weightedCandidate );
-                    worseKeeper.Add( weightedCandidate );
+                    worstKeeper.Add( weightedCandidate );
                 }
 
                 var (bestResult, _) = bestKeeper.FirstOrDefault(weightedResult => weightedResult.Weight == 0);
@@ -207,7 +207,7 @@ namespace ITI.RecommanderSystem.Syllabus
 
                 population.Clear();
                 population.AddRange( bestKeeper.Select( result => result.Result ) );
-                population.AddRange( worseKeeper.Select( result => result.Result ) );
+                population.AddRange( worstKeeper.Select( result => result.Result ) );
 
                 // Crossings:
                 for( var i = 0; i < kept - 1; ++i )
