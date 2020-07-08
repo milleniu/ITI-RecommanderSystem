@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ITI.RecommanderSystem.CSV;
-using System.Linq;
-using ITI.RecommanderSystem.Practice2.DataModels;
+﻿using ITI.RecommanderSystem.Practice2.DataModels;
 using ITI.RecommanderSystem.Practice2.Model;
+using System;
 
 namespace ITI.RecommanderSystem.Practice2
 {

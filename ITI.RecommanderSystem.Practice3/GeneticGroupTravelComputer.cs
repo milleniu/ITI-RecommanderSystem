@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using ITI.RecommanderSystem.Core;
+﻿using ITI.RecommanderSystem.Core;
 using ITI.RecommanderSystem.Practice2.Model;
 
 namespace ITI.RecommanderSystem.Practice3
