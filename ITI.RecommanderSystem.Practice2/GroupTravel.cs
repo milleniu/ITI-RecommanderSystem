@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ITI.RecommanderSystem.Practice2.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using ITI.RecommanderSystem.Practice2.Models;
-using ITI.RecommanderSystem.MarkovChains;
+using ITI.RecommanderSystem.Core;
 
 namespace ITI.RecommanderSystem.Practice2
 {

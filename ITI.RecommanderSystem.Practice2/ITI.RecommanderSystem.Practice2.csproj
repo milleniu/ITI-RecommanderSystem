@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ITI.RecommanderSystem.Core\ITI.RecommanderSystem.Core.csproj" />
     <ProjectReference Include="..\ITI.RecommanderSystem.CSV\ITI.RecommanderSystem.CSV.csproj" />
-    <ProjectReference Include="..\ITI.RecommanderSystem.MarkovChains\ITI.RecommanderSystem.MarkovChains.csproj" />
   </ItemGroup>
 
 </Project>
