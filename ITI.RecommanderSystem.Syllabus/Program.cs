@@ -2,7 +2,8 @@
 using QuickGraph;
 using System;
 using System.Collections.Generic;
-using ITI.RecommanderSystem.MarkovChains;
+using System.Linq;
+using ITI.RecommanderSystem.Core.DataStructure;
 
 namespace ITI.RecommanderSystem.Syllabus
 {
@@ -10,7 +11,8 @@ namespace ITI.RecommanderSystem.Syllabus
     {
         private static void Main( string[] args )
         {
-            SimpleSalesman();
+            var (result, iterations) = NQueenProblem( 8 );
+            Console.WriteLine($"[{string.Join("; ", result)} ] (iterations: {iterations})");
         }
 
         private static void UserBasedSimilarities()
@@ -139,6 +141,114 @@ namespace ITI.RecommanderSystem.Syllabus
             var result = SimulatedAnnealing.ResolveGraph( graph, CostFunction );
             var cost = CostFunction( result );
             Console.WriteLine( $"Cost: {cost,5} Path: {string.Join( "->", result )}->{result[ 0 ]}" );
+        }
+
+        private static (int[] Result, int Iterations) NQueenProblem( int size )
+        {
+            var random = new Random();
+            const int initialPopulationSize = 25;
+
+            var resultAscending = new WeightedResult<int[]>.WeightedResultAscending();
+            var resultDescending = new WeightedResult<int[]>.WeightedResultDescending();
+
+            int[] RandomSolution()
+            {
+                var randomSolution = new int[ size ];
+                for( var i = 0; i < size; i++ )
+                    randomSolution[ i ] = random.Next( 0, size );
+                return randomSolution;
+            }
+
+            int CostFunction( IReadOnlyList<int> solution )
+            {
+                var score = 0;
+                for( var i = 0; i < size; ++i )
+                for( var j = 0; j < size; ++j )
+                {
+                    if( i == j ) continue;
+
+                    if( solution[ i ] == solution[ j ] // Rows
+                     || solution[ i ] + ( j - i ) == solution[ j ] // Diagonals Descending
+                     || solution[ i ] + ( i - j ) == solution[ j ] ) // Diagonals Ascending
+                    {
+                        score += 1;
+                    }
+                }
+
+                return score;
+            }
+
+            var population = new List<int[]>();
+            for( var i = 0; i < initialPopulationSize; i++ )
+                population.Add( RandomSolution() );
+
+            var iterationsCount = 0;
+            while( true )
+            {
+                const int bestKeptCount = 10;
+                const int worseKeptCount = 4;
+                const int kept = bestKeptCount + worseKeptCount;
+
+                var bestKeeper = new BestKeeper<WeightedResult<int[]>>( bestKeptCount, resultDescending );
+                var worseKeeper = new BestKeeper<WeightedResult<int[]>>( worseKeptCount, resultAscending );
+                foreach( var candidate in population )
+                {
+                    var cost = CostFunction( candidate );
+                    var weightedCandidate = new WeightedResult<int[]>( candidate, cost );
+                    bestKeeper.Add( weightedCandidate );
+                    worseKeeper.Add( weightedCandidate );
+                }
+
+                var (bestResult, _) = bestKeeper.FirstOrDefault(weightedResult => weightedResult.Weight == 0);
+                if( bestResult != null )
+                    return (bestResult, iterationsCount);
+
+                iterationsCount += 1;
+
+                population.Clear();
+                population.AddRange( bestKeeper.Select( result => result.Result ) );
+                population.AddRange( worseKeeper.Select( result => result.Result ) );
+
+                // Crossings:
+                for( var i = 0; i < kept - 1; ++i )
+                {
+                    var a = population[ i ];
+                    var b = population[ i + 1 ];
+                    var crossed = new int[ size ];
+
+                    var mutationIdx = random.Next( 0, size + 1 );
+                    if( mutationIdx == 0 )
+                    {
+                        Array.Copy( a, crossed, size );
+                    }
+                    else if( mutationIdx == size )
+                    {
+                        Array.Copy( b, crossed, size );
+                    }
+                    else
+                    {
+                        Array.Copy( a, crossed, mutationIdx );
+                        Array.Copy( b, mutationIdx, crossed, mutationIdx, size - mutationIdx );
+                    }
+
+                    population.Add( crossed );
+                }
+
+                // Mutations:
+                for( var i = 0; i < kept; ++i )
+                {
+                    var original = population[ i ];
+                    var mutated = (int[]) original.Clone();
+
+                    var mutationIdx = random.Next( 0, size );
+                    mutated[ mutationIdx ] = random.Next( 0, size );
+
+                    population.Add( mutated );
+                }
+
+                for( var i = 0; i < 5; ++i )
+                    population.Add( RandomSolution() );
+            }
         }
     }
 }
