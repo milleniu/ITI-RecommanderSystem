@@ -1,9 +1,9 @@
 ﻿using ITI.RecommanderSystem.Core;
 using ITI.RecommanderSystem.CSV;
-using ITI.RecommanderSystem.Practice1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ITI.RecommanderSystem.Practice1.DataModels;
 
 namespace ITI.RecommanderSystem.Practice1
 {

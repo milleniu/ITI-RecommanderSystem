@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ITI.RecommanderSystem.Practice2.Models
+namespace ITI.RecommanderSystem.Practice2.Model
 {
     public readonly struct FlightPath
     {

@@ -1,6 +1,6 @@
 ﻿using CsvHelper.Configuration;
 
-namespace ITI.RecommanderSystem.Practice1.Models
+namespace ITI.RecommanderSystem.Practice1.DataModels
 {
     public class UserMovieRating
     {

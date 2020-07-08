@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 
-namespace ITI.RecommanderSystem.Practice1.Models
+namespace ITI.RecommanderSystem.Practice1.DataModels
 {
     public class Movie
     {

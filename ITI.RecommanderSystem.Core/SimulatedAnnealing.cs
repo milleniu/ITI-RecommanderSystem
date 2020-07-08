@@ -7,7 +7,7 @@ namespace ITI.RecommanderSystem.Core
 {
     public static class SimulatedAnnealing
     {
-        public static int[] ResolveInDomain
+        public static (int[] Result, int iterations) ResolveInDomain
         (
             (int, int)[] domain,
             Func<IReadOnlyList<int>, float> costFunction,
@@ -33,6 +33,7 @@ namespace ITI.RecommanderSystem.Core
 
             CopyVector();
 
+            var iterations = 0;
             while ( T > TMin )
             {
                 var i = random.Next( 0, domain.Length );
@@ -50,9 +51,10 @@ namespace ITI.RecommanderSystem.Core
                     Array.Copy( vectorB, vector, vector.Length );
 
                 T *= cool;
+                iterations += 1;
             }
 
-            return vector;
+            return (vector, iterations);
         }
 
         public static TVertex[] ResolveGraph<TVertex, TEdge>
