@@ -2,28 +2,34 @@
 
 namespace ITI.RecommanderSystem.Core.DataStructure
 {
-    public readonly struct WeightedResult
+    public readonly struct WeightedResult<T>
     {
-        public int ResultId { get; }
+        public T Result { get; }
 
         public float Weight { get; }
 
-        public WeightedResult( int resultId, float weight )
+        public WeightedResult( T result, float weight )
         {
-            ResultId = resultId;
+            Result = result;
             Weight = weight;
         }
 
-        public void Deconstruct( out int resultId, out float weight )
+        public void Deconstruct( out T result, out float weight )
         {
-            resultId = ResultId;
+            result = Result;
             weight = Weight;
         }
 
-        public class WeightedResultComparer : IComparer<WeightedResult>
+        public class WeightedResultAscending : IComparer<WeightedResult<T>>
         {
-            public int Compare( WeightedResult x, WeightedResult y )
+            public int Compare( WeightedResult<T> x, WeightedResult<T> y )
                 => x.Weight > y.Weight ? 1 : -1;
+        }
+
+        public class WeightedResultDescending : IComparer<WeightedResult<T>>
+        {
+            public int Compare(WeightedResult<T> x, WeightedResult<T> y)
+                => x.Weight > y.Weight ? -1 : 1;
         }
     }
 }

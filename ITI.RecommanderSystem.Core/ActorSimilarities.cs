@@ -5,8 +5,8 @@ namespace ITI.RecommanderSystem.Core
 {
     public static class ActorSimilarities
     {
-        private static readonly WeightedResult.WeightedResultComparer ResultComparer =
-            new WeightedResult.WeightedResultComparer();
+        private static readonly WeightedResult<int>.WeightedResultAscending ResultAscending =
+            new WeightedResult<int>.WeightedResultAscending();
 
         public static float[ , ] ComputeActorsSimilarities
         (
@@ -39,7 +39,7 @@ namespace ITI.RecommanderSystem.Core
             return matrix;
         }
 
-        public static IReadOnlyCollection<WeightedResult> GetSimilarActors
+        public static IReadOnlyCollection<WeightedResult<int>> GetSimilarActors
         (
             int actorId,
             float[ , ] actorSimilarities,
@@ -49,31 +49,31 @@ namespace ITI.RecommanderSystem.Core
             var n = actorSimilarities.GetLength( 0 );
             var actorIdx = actorId - 1;
 
-            var bestKeeper = new BestKeeper<WeightedResult>( count, ResultComparer );
+            var bestKeeper = new BestKeeper<WeightedResult<int>>( count, ResultAscending );
 
             for( var i = 0; i < n; ++i )
             {
                 if( i == actorIdx ) continue;
 
-                var actorSimilarity = new WeightedResult( i + 1, actorSimilarities[ actorIdx, i ] );
+                var actorSimilarity = new WeightedResult<int>( i + 1, actorSimilarities[ actorIdx, i ] );
                 bestKeeper.Add( actorSimilarity );
             }
 
             return bestKeeper;
         }
 
-        public static IReadOnlyCollection<WeightedResult> GetActorBasedRecommendations
+        public static IReadOnlyCollection<WeightedResult<int>> GetActorBasedRecommendations
         (
             int actorId,
             int[ , ] ratings,
-            IReadOnlyCollection<WeightedResult> similarActors,
+            IReadOnlyCollection<WeightedResult<int>> similarActors,
             int count
         )
         {
             var elementCount = ratings.GetLength( 1 );
             var actorIdx = actorId - 1;
 
-            var bestKeeper = new BestKeeper<WeightedResult>( count, ResultComparer );
+            var bestKeeper = new BestKeeper<WeightedResult<int>>( count, ResultAscending );
 
             for( var elementIdx = 0; elementIdx < elementCount; ++elementIdx )
             {
@@ -96,7 +96,7 @@ namespace ITI.RecommanderSystem.Core
                 if( !hasSimilarRate ) continue;
 
                 var score = similaritySum == 0 ? 0F : weightedSum / similaritySum;
-                var result = new WeightedResult( elementIdx + 1, score );
+                var result = new WeightedResult<int>( elementIdx + 1, score );
                 bestKeeper.Add( result );
             }
 

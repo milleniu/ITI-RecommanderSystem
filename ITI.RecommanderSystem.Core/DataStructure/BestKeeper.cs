@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ITI.RecommanderSystem.Core.DataStructure
 {
-    internal class BestKeeper<T> : IReadOnlyCollection<T>
+    public class BestKeeper<T> : IReadOnlyCollection<T>
     {
         private readonly T[] _items;
 
